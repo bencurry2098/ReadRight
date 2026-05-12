@@ -10,6 +10,19 @@
 
 set -uo pipefail  # -e removed: adb commands return non-zero for benign reasons
 
+# Find adb: prefer Android SDK, fall back to Flutter's bundled copy, then PATH
+_find_adb() {
+  local sdk_adb="$HOME/Library/Android/sdk/platform-tools/adb"
+  if [[ -x "$sdk_adb" ]]; then echo "$sdk_adb"; return; fi
+  local flutter_adb
+  flutter_adb=$(find "$HOME/Library/Android/sdk" -name adb -type f 2>/dev/null | head -1)
+  if [[ -n "$flutter_adb" ]]; then echo "$flutter_adb"; return; fi
+  if command -v adb >/dev/null 2>&1; then command -v adb; return; fi
+  echo ""
+}
+ADB=$(_find_adb)
+[[ -n "$ADB" ]] || { echo "FATAL: adb not found. Install Android SDK platform-tools or add adb to PATH." >&2; exit 1; }
+
 DEVICE="emulator-5554"
 OUTPUT_DIR="screenshots/$(date +%Y-%m-%d_%H-%M-%S)"
 mkdir -p "$OUTPUT_DIR"
@@ -20,15 +33,15 @@ die() { echo "FATAL: $*" >&2; exit 1; }
 
 adb_ok() {
   # Verify adb can see the device before we start
-  adb -s "$DEVICE" get-state >/dev/null 2>&1 || die "Device $DEVICE not found. Is the emulator running and adb connected?"
+  "$ADB" -s "$DEVICE" get-state >/dev/null 2>&1 || die "Device $DEVICE not found. Is the emulator running and adb connected?"
 }
 
 adb_screenshot() {
   local name="$1"
   local path="$OUTPUT_DIR/${name}.png"
-  adb -s "$DEVICE" shell screencap -p /sdcard/screen.png || { echo "  [warn] screencap failed for $name"; return; }
-  adb -s "$DEVICE" pull /sdcard/screen.png "$path" >/dev/null 2>&1 || { echo "  [warn] pull failed for $name"; return; }
-  adb -s "$DEVICE" shell rm /sdcard/screen.png 2>/dev/null || true
+  "$ADB" -s "$DEVICE" shell screencap -p /sdcard/screen.png || { echo "  [warn] screencap failed for $name"; return; }
+  "$ADB" -s "$DEVICE" pull /sdcard/screen.png "$path" >/dev/null 2>&1 || { echo "  [warn] pull failed for $name"; return; }
+  "$ADB" -s "$DEVICE" shell rm /sdcard/screen.png 2>/dev/null || true
   echo "  saved: $path"
 }
 
@@ -37,7 +50,7 @@ wait_for_idle() {
 }
 
 tap() {
-  adb -s "$DEVICE" shell input tap "$1" "$2" || true
+  "$ADB" -s "$DEVICE" shell input tap "$1" "$2" || true
   wait_for_idle 1.5
 }
 
@@ -45,9 +58,9 @@ tap_text() {
   local text="$1"
   local coords
 
-  adb -s "$DEVICE" shell uiautomator dump /sdcard/ui.xml >/dev/null 2>&1 || true
+  "$ADB" -s "$DEVICE" shell uiautomator dump /sdcard/ui.xml >/dev/null 2>&1 || true
 
-  coords=$(adb -s "$DEVICE" shell cat /sdcard/ui.xml 2>/dev/null | \
+  coords=$("$ADB" -s "$DEVICE" shell cat /sdcard/ui.xml 2>/dev/null | \
     grep -o "text=\"${text}\"[^/]*/>" | head -1 | \
     grep -o 'bounds="\[[0-9]*,[0-9]*\]\[[0-9]*,[0-9]*\]"' | \
     grep -o '\[[0-9]*,[0-9]*\]\[[0-9]*,[0-9]*\]' || true)
@@ -71,22 +84,22 @@ type_text() {
   # URL-encode spaces as %s; adb input text doesn't handle raw spaces well
   local encoded
   encoded=$(printf '%s' "$1" | sed 's/ /%s/g')
-  adb -s "$DEVICE" shell input text "$encoded" || true
+  "$ADB" -s "$DEVICE" shell input text "$encoded" || true
   wait_for_idle 0.5
 }
 
 clear_field() {
-  adb -s "$DEVICE" shell input keyevent KEYCODE_CTRL_A || true
-  adb -s "$DEVICE" shell input keyevent KEYCODE_DEL || true
+  "$ADB" -s "$DEVICE" shell input keyevent KEYCODE_CTRL_A || true
+  "$ADB" -s "$DEVICE" shell input keyevent KEYCODE_DEL || true
   wait_for_idle 0.3
 }
 
 navigate_to_login() {
   echo "  Launching app..."
-  adb -s "$DEVICE" shell am force-stop com.example.readright 2>/dev/null || true
+  "$ADB" -s "$DEVICE" shell am force-stop com.example.readright 2>/dev/null || true
   sleep 1
-  adb -s "$DEVICE" shell am start -n com.example.readright/.MainActivity 2>/dev/null || \
-    adb -s "$DEVICE" shell monkey -p com.example.readright -c android.intent.category.LAUNCHER 1 >/dev/null 2>&1 || \
+  "$ADB" -s "$DEVICE" shell am start -n com.example.readright/.MainActivity 2>/dev/null || \
+    "$ADB" -s "$DEVICE" shell monkey -p com.example.readright -c android.intent.category.LAUNCHER 1 >/dev/null 2>&1 || \
     die "Could not launch com.example.readright — is the app installed on $DEVICE?"
   wait_for_idle 4
 }
@@ -157,7 +170,7 @@ screenshot_student() {
   tap_text "Dolch Pre-Primer" 2>/dev/null && {
     wait_for_idle 2
     adb_screenshot "student_04_word_list_detail"
-    adb -s "$DEVICE" shell input keyevent KEYCODE_BACK || true
+    "$ADB" -s "$DEVICE" shell input keyevent KEYCODE_BACK || true
     wait_for_idle 1.5
   } || true
 
@@ -185,7 +198,7 @@ screenshot_teacher() {
   tap_text "Dolch Pre-Primer" 2>/dev/null && {
     wait_for_idle 2
     adb_screenshot "teacher_03_word_list_detail"
-    adb -s "$DEVICE" shell input keyevent KEYCODE_BACK || true
+    "$ADB" -s "$DEVICE" shell input keyevent KEYCODE_BACK || true
     wait_for_idle 1.5
   } || true
 
@@ -196,7 +209,7 @@ screenshot_teacher() {
   tap 540 400
   wait_for_idle 2
   adb_screenshot "teacher_05_student_view"
-  adb -s "$DEVICE" shell input keyevent KEYCODE_BACK || true
+  "$ADB" -s "$DEVICE" shell input keyevent KEYCODE_BACK || true
   wait_for_idle 1.5
 
   tap_text "Settings" || true
