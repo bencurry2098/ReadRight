@@ -119,8 +119,10 @@ logout() {
 
 prompt_creds() {
   local role="$1"
-  local email_var="${role^^}_EMAIL"
-  local pass_var="${role^^}_PASS"
+  local role_upper
+  role_upper=$(echo "$role" | tr '[:lower:]' '[:upper:]')
+  local email_var="${role_upper}_EMAIL"
+  local pass_var="${role_upper}_PASS"
 
   if [[ -z "${!email_var:-}" ]]; then
     read -rp "  ${role} email: " val
