@@ -175,6 +175,7 @@ class _TeacherStudentsPage extends State<TeacherStudentsPage> {
                 children: [
                   Text(
                     'Get a detailed view of your students data',
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 30,
                     ),

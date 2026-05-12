@@ -74,6 +74,7 @@ class _TeacherDashboardView extends StatelessWidget {
                             const SizedBox(height: 8),
                             Text(
                               'Monitor each student’s pronunciation and improvement',
+                              textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontSize: 16,
                                 color: Theme.of(context).colorScheme.onSurfaceVariant,
