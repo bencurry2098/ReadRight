@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ReadRight — App Screenshots</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #f1f5f9;
+      color: #0f172a;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    header {
+      background: #166534;
+      color: #fff;
+      padding: 48px 32px 40px;
+      text-align: center;
+    }
+    header h1 { font-size: 2rem; font-weight: 700; letter-spacing: -0.5px; }
+    header p  { margin-top: 10px; font-size: 1rem; color: #bbf7d0; max-width: 560px; margin-inline: auto; }
+
+    .badge {
+      display: inline-block;
+      background: #16a34a;
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-top: 16px;
+      letter-spacing: 0.4px;
+    }
+
+    main { max-width: 1400px; margin: 0 auto; padding: 48px 24px 80px; }
+
+    section { margin-bottom: 56px; }
+    section h2 { font-size: 1.25rem; font-weight: 600; margin-bottom: 20px; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    }
+    .card img {
+      width: 100%;
+      display: block;
+      border-bottom: 1px solid #e2e8f0;
+      aspect-ratio: 16/10;
+      object-fit: cover;
+      object-position: top;
+      background: #f8fafc;
+    }
+    .card-label {
+      padding: 12px 16px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #334155;
+    }
+
+    /* Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.75);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-box {
+      background: #fff;
+      border-radius: 14px;
+      max-width: 1200px;
+      width: 100%;
+      max-height: 90vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 20px;
+      border-bottom: 1px solid #e2e8f0;
+      font-weight: 600;
+    }
+    .modal-close {
+      background: none; border: none; cursor: pointer;
+      font-size: 1.5rem; color: #64748b; line-height: 1;
+    }
+    .modal-close:hover { color: #0f172a; }
+    .modal-body { overflow-y: auto; }
+    .modal-body img { width: 100%; display: block; }
+
+    footer {
+      text-align: center;
+      padding: 24px;
+      font-size: 0.8rem;
+      color: #94a3b8;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>ReadRight</h1>
+  <p>A speech-based reading practice app — students record word pronunciations, receive instant feedback, and track progress across Dolch word lists.</p>
+  <span class="badge">Portfolio Screenshots</span>
+</header>
+
+<main>
+
+  <section>
+    <h2 style="border-left: 4px solid #64748b; padding-left: 12px; color: #64748b">
+      Public Pages
+    </h2>
+    <div class="grid">
+      <div class="card" onclick="openModal('screenshots/public-login.png', 'Login')">
+        <img src="screenshots/public-login.png" alt="Login" loading="lazy" />
+        <div class="card-label">Login</div>
+      </div>
+
+      <div class="card" onclick="openModal('screenshots/public-signup.png', 'Sign Up')">
+        <img src="screenshots/public-signup.png" alt="Sign Up" loading="lazy" />
+        <div class="card-label">Sign Up</div>
+      </div>
+
+      <div class="card" onclick="openModal('screenshots/public-reset-password.png', 'Reset Password')">
+        <img src="screenshots/public-reset-password.png" alt="Reset Password" loading="lazy" />
+        <div class="card-label">Reset Password</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2 style="border-left: 4px solid #2563eb; padding-left: 12px; color: #2563eb">
+      Student Views
+    </h2>
+    <div class="grid">
+      <div class="card" onclick="openModal('screenshots/student-dashboard.png', 'Student Dashboard')">
+        <img src="screenshots/student-dashboard.png" alt="Student Dashboard" loading="lazy" />
+        <div class="card-label">Student Dashboard</div>
+      </div>
+
+      <div class="card" onclick="openModal('screenshots/student-word-list.png', 'Word List')">
+        <img src="screenshots/student-word-list.png" alt="Word List" loading="lazy" />
+        <div class="card-label">Word List</div>
+      </div>
+
+      <div class="card" onclick="openModal('screenshots/student-practice.png', 'Practice')">
+        <img src="screenshots/student-practice.png" alt="Practice" loading="lazy" />
+        <div class="card-label">Practice</div>
+      </div>
+
+      <div class="card" onclick="openModal('screenshots/student-feedback.png', 'Feedback')">
+        <img src="screenshots/student-feedback.png" alt="Feedback" loading="lazy" />
+        <div class="card-label">Feedback</div>
+      </div>
+
+      <div class="card" onclick="openModal('screenshots/student-progress.png', 'Progress')">
+        <img src="screenshots/student-progress.png" alt="Progress" loading="lazy" />
+        <div class="card-label">Progress</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2 style="border-left: 4px solid #d97706; padding-left: 12px; color: #d97706">
+      Teacher Views
+    </h2>
+    <div class="grid">
+      <div class="card" onclick="openModal('screenshots/teacher-dashboard.png', 'Teacher Dashboard')">
+        <img src="screenshots/teacher-dashboard.png" alt="Teacher Dashboard" loading="lazy" />
+        <div class="card-label">Teacher Dashboard</div>
+      </div>
+
+      <div class="card" onclick="openModal('screenshots/teacher-students.png', 'Students')">
+        <img src="screenshots/teacher-students.png" alt="Students" loading="lazy" />
+        <div class="card-label">Students</div>
+      </div>
+
+      <div class="card" onclick="openModal('screenshots/teacher-student-view.png', 'Student View')">
+        <img src="screenshots/teacher-student-view.png" alt="Student View" loading="lazy" />
+        <div class="card-label">Student View</div>
+      </div>
+
+      <div class="card" onclick="openModal('screenshots/teacher-manage-students.png', 'Manage Students')">
+        <img src="screenshots/teacher-manage-students.png" alt="Manage Students" loading="lazy" />
+        <div class="card-label">Manage Students</div>
+      </div>
+
+      <div class="card" onclick="openModal('screenshots/teacher-word-lists.png', 'Word Lists')">
+        <img src="screenshots/teacher-word-lists.png" alt="Word Lists" loading="lazy" />
+        <div class="card-label">Word Lists</div>
+      </div>
+
+      <div class="card" onclick="openModal('screenshots/teacher-word-list-details.png', 'Word List Details')">
+        <img src="screenshots/teacher-word-list-details.png" alt="Word List Details" loading="lazy" />
+        <div class="card-label">Word List Details</div>
+      </div>
+
+      <div class="card" onclick="openModal('screenshots/teacher-settings.png', 'Teacher Settings')">
+        <img src="screenshots/teacher-settings.png" alt="Teacher Settings" loading="lazy" />
+        <div class="card-label">Teacher Settings</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  Screenshots captured automatically with Playwright &nbsp;·&nbsp; ReadRight
+</footer>
+
+<div class="modal-overlay" id="modal" onclick="closeModalOnOverlay(event)">
+  <div class="modal-box">
+    <div class="modal-header">
+      <span id="modal-title"></span>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <img id="modal-img" src="" alt="" />
+    </div>
+  </div>
+</div>
+
+<script>
+  function openModal(src, title) {
+    document.getElementById('modal-img').src = src;
+    document.getElementById('modal-title').textContent = title;
+    document.getElementById('modal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal() {
+    document.getElementById('modal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function closeModalOnOverlay(e) {
+    if (e.target === document.getElementById('modal')) closeModal();
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+</script>
+</body>
+</html>
