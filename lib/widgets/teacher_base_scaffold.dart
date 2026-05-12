@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:readright/config/config.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -62,6 +63,10 @@ class _TeacherBaseScaffoldState extends State<TeacherBaseScaffold> {
       appBar: AppBar(
         backgroundColor: Color(AppConfig.primaryColor),
         elevation: 0,
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          statusBarIconBrightness: Brightness.light,
+        ),
         title: Row(
           children: [
             if (widget.pageIcon != null)

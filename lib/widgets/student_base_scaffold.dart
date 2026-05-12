@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:readright/config/config.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -28,6 +29,11 @@ class StudentBaseScaffold extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(AppConfig.primaryColor),
+        elevation: 0,
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          statusBarIconBrightness: Brightness.light,
+        ),
         iconTheme: const IconThemeData(color: Colors.white),
         title: Row(
           children: [
