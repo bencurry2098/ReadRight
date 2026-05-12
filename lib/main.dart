@@ -143,6 +143,9 @@ class _MyAppState extends State<MyApp> {
           primary: Color(AppConfig.primaryColor),
           secondary: Color(AppConfig.secondaryColor),
         ),
+        scaffoldBackgroundColor: themeProvider.isDarkMode
+            ? const Color(0xFF121212)
+            : const Color(0xFFF5F5F5),
         useMaterial3: false,
       ),
       home: _homePage,
